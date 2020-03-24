@@ -87,10 +87,11 @@ function dessinEvolution(donnees) {
 
 function main() {
     "use strict";
+    var url_base = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/";
     Promise.all([
-        d3.csv("test/time_series_19-covid-Confirmed.csv"),
-        d3.csv("test/time_series_19-covid-Deaths.csv"),
-        d3.csv("test/time_series_19-covid-Recovered.csv")
+        d3.csv(url_base + "time_series_19-covid-Confirmed.csv"),
+        d3.csv(url_base + "time_series_19-covid-Deaths.csv"),
+        d3.csv(url_base + "time_series_19-covid-Recovered.csv")
     ]).then(function (files) {
         var data = files.map(function (e) { return e.filter(function (d) { return (d["Country/Region"] === "France"); }); }),
             confirmes = data[0][0],
