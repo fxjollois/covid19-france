@@ -1,10 +1,13 @@
-/*global d3,console,Promise */
+/*global d3,Promise */
 
 function dessinEvolution(donnees) {
     "use strict";
-    var margin = {top: 10, right: 30, bottom: 30, left: 60},
+    var margin = {top: 30, right: 30, bottom: 30, left: 60},
         width = 1000 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom,
+        
+        couleur_malades = "darkslateblue",
+        couleur_deces = "darkred",
         
         svg = d3.select("#graph")
             .append("svg")
@@ -34,11 +37,27 @@ function dessinEvolution(donnees) {
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
+    
     svg.append("g")
         .call(d3.axisLeft(y));
+    svg.append("text")
+        .attr("y", 0 - margin.top)
+        .attr("x", 0)
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .style("fill", couleur_malades)
+        .text("Malades");    
+    
     svg.append("g")
         .attr("transform", "translate(" + width + ",0)")
         .call(d3.axisRight(y2));
+    svg.append("text")
+        .attr("y", 0 - margin.top)
+        .attr("x", width)
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .style("fill", couleur_deces)
+        .text("Décès");    
     
     svg.selectAll(".etape")
         .data(etapes)
@@ -56,7 +75,7 @@ function dessinEvolution(donnees) {
         .data(etapes)
         .enter()
         .append("text")
-        .attr("x", function(d) { return x(Date.parse(d.date)) + 10; })
+        .attr("x", function(d) { return x(Date.parse(d.date)) + 7; })
         .attr("y", 0)
         .style("writing-mode", "tb")
         .style("fill", "gray")
@@ -66,7 +85,7 @@ function dessinEvolution(donnees) {
     svg.append("path")
         .datum(donnees)
         .attr("fill", "none")
-        .attr("stroke", "steelblue")
+        .attr("stroke", couleur_malades)
         .attr("stroke-width", 1.5)
         .attr("d", d3.line()
             .x(function (d) { return x(d.date); })
@@ -75,7 +94,7 @@ function dessinEvolution(donnees) {
     svg.append("path")
         .datum(donnees)
         .attr("fill", "none")
-        .attr("stroke", "darkred")
+        .attr("stroke", couleur_deces)
         .attr("stroke-width", 1.5)
         .attr("d", d3.line()
             .x(function (d) { return x(d.date); })
