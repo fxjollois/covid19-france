@@ -23,9 +23,13 @@ function dessinEvolution(donnees) {
 
         y2 = d3.scaleLinear()
             .domain([0, d3.max(donnees, function (d) { return +d.morts * 1.2; })])
-            .range([ height, 0 ]);
-
-    console.log(donnees);
+            .range([ height, 0 ]),
+        
+        etapes = [
+            {date: "3/12/20", libelle: "allocution du président" },
+            {date: "3/16/20", libelle: "école à la maison" },
+            {date: "3/17/20", libelle: "début du confinement" }
+        ];
     
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
@@ -35,6 +39,29 @@ function dessinEvolution(donnees) {
     svg.append("g")
         .attr("transform", "translate(" + width + ",0)")
         .call(d3.axisRight(y2));
+    
+    svg.selectAll(".etape")
+        .data(etapes)
+        .enter()
+        .append("line")
+        .attr("x1", function(d) { return x(Date.parse(d.date)); })
+        .attr("x2", function(d) { return x(Date.parse(d.date)); })
+        .attr("y1", 0)
+        .attr("y2", height)
+        .style("stroke-width", 2)
+        .style("stroke-dasharray", "10 5")
+        .style("stroke", "lightgray")
+        .style("fill", "none");
+    svg.selectAll(".etape")
+        .data(etapes)
+        .enter()
+        .append("text")
+        .attr("x", function(d) { return x(Date.parse(d.date)) + 10; })
+        .attr("y", 0)
+        .style("writing-mode", "tb")
+        .style("fill", "gray")
+        .html(function (d) { return d.libelle; });
+
 
     svg.append("path")
         .datum(donnees)
@@ -55,23 +82,6 @@ function dessinEvolution(donnees) {
             .y(function (d) { return y2(d.morts); })
             );
     
-    d3.csv(
-        "etapes.csv", 
-        function (etapes) {
-            console.log(etapes);
-            svg.selectAll(".etape")
-                .data(etapes)
-                .enter()
-                .append("line")
-                .attr("x1", 0) // function(d) { console.log("la"); return x(Date.parse(d.date)); })
-                .attr("x2", width) // function(d) { console.log("la aussi"); return x(Date.parse(d.date)); })
-                .attr("y1", 0)
-                .attr("y2", height)
-                .style("stroke-width", 2)
-                .style("stroke", "red")
-                .style("fill", "none");
-        }
-    )
 
 }
 
