@@ -2,7 +2,7 @@
 
 function dessinEvolution(donnees) {
     "use strict";
-    var margin = {top: 30, right: 30, bottom: 30, left: 60},
+    var margin = {top: 30, right: 40, bottom: 30, left: 60},
         width = 1000 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom,
         
@@ -112,7 +112,7 @@ function main() {
         d3.csv(url_base + "time_series_covid19_deaths_global.csv"),
         d3.csv(url_base + "time_series_covid19_recovered_global.csv")
     ]).then(function (files) {
-        var data = files.map(function (e) { return e.filter(function (d) { return (d["Country/Region"] === "France"); }); }),
+        var data = files.map(function (e) { return e.filter(function (d) { return (d["Country/Region"] === "France" & d["Province/State"] === ""); }); }),
             confirmes = data[0][0],
             test_date = new RegExp("[0-9]+/[0-9]+/[0-9]+"),
             dates = Object.keys(confirmes).filter(function (e) { return test_date.test(e); }),
