@@ -6,6 +6,7 @@ function dessinEvolution(donnees, france = true) {
     var margin = {top: 30, right: 40, bottom: 30, left: 60},
         width = 1000 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom,
+        pad = 20,
         
         couleur_malades = "darkslateblue",
         couleur_deces = "darkred",
@@ -23,11 +24,11 @@ function dessinEvolution(donnees, france = true) {
         
         y = d3.scaleLinear()
             .domain([0, d3.max(donnees, function (d) { return +d.confirmes; })])
-            .range([ height, 0 ]),
+            .range([ (height / 2) - pad, 0 ]),
 
         y2 = d3.scaleLinear()
             .domain([0, d3.max(donnees, function (d) { return +d.morts * 1.2; })])
-            .range([ height, 0 ]),
+            .range([ height, (height / 2) + pad ]),
         
         etapes = [
             {date: "3/12/20", libelle: "allocution du président" },
@@ -38,25 +39,31 @@ function dessinEvolution(donnees, france = true) {
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
+    svg.append("g")
+        .attr("transform", "translate(0," + (height / 2 - pad) + ")")
+        .call(d3.axisBottom(x));
     
     svg.append("g")
         .call(d3.axisLeft(y));
+    svg.append("g")
+        .attr("transform", "translate(" + width + ",0)")
+        .call(d3.axisRight(y));
     svg.append("text")
-        .attr("y", 0 - margin.top)
-        .attr("x", 0)
-        .attr("dy", "1em")
-        .style("text-anchor", "middle")
+        .attr("y", 0)
+        .attr("dy", 10)
+        .attr("x", 10)
         .style("fill", couleur_malades)
         .text("Malades");    
     
     svg.append("g")
+        .call(d3.axisLeft(y2));
+    svg.append("g")
         .attr("transform", "translate(" + width + ",0)")
         .call(d3.axisRight(y2));
     svg.append("text")
-        .attr("y", 0 - margin.top)
-        .attr("x", width)
-        .attr("dy", "1em")
-        .style("text-anchor", "middle")
+        .attr("y", height / 2 + pad)
+        .attr("x", 10)
+        .attr("dy", 10)
         .style("fill", couleur_deces)
         .text("Décès");    
     
@@ -67,7 +74,7 @@ function dessinEvolution(donnees, france = true) {
             .append("line")
             .attr("x1", function(d) { return x(Date.parse(d.date)); })
             .attr("x2", function(d) { return x(Date.parse(d.date)); })
-            .attr("y1", 0)
+            .attr("y1", function(d, i) { return (etapes.length - i - 1) * 15; })
             .attr("y2", height)
             .style("stroke-width", 2)
             .style("stroke-dasharray", "10 5")
@@ -77,9 +84,10 @@ function dessinEvolution(donnees, france = true) {
             .data(etapes)
             .enter()
             .append("text")
-            .attr("x", function(d) { return x(Date.parse(d.date)) + 7; })
-            .attr("y", 0)
-            .style("writing-mode", "tb")
+            .attr("x", function(d) { return x(Date.parse(d.date)); })
+            .attr("y", function(d, i) { return (etapes.length - i - 1) * 15; })
+            .attr("dx", "-5")
+            .style("text-anchor", "end")
             .style("fill", "gray")
             .html(function (d) { return d.libelle; });        
     }
