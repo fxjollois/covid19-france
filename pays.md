@@ -9,4 +9,5 @@ Cliquer sur **Go** pour afficher le graphique.
 <select id="pays"></select><select id="region"></select><button id="go">Go</button>
 <div id = "graph"></div>
 <script src="d3.min.js"></script>
+<script src="dessin.js"></script>
 <script src="script_mondial.js"></script>

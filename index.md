@@ -8,4 +8,5 @@ Cette page a pour but de se focaliser sur l'évolution en France. Pour avoir une
 
 <div id = "graph"></div>
 <script src="d3.min.js"></script>
+<script src="dessin.js"></script>
 <script src="script.js"></script>
