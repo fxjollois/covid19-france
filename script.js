@@ -107,6 +107,8 @@ function dessinEvolution(donnees) {
 function main() {
     "use strict";
     var url_base = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/";
+    // à décommenter pour faire des tests
+    // url_base = "test/";
     Promise.all([
         d3.csv(url_base + "time_series_covid19_confirmed_global.csv"),
         d3.csv(url_base + "time_series_covid19_deaths_global.csv"),
@@ -127,10 +129,7 @@ function main() {
                 return res;
             });
         dessinEvolution(donnees);
-        // files[0] will contain file1.csv
-        // files[1] will contain file2.csv
     }).catch(function (err) {
-        // Gestion de l'erreur ici
         d3.select("#graph").html("Problème de chargement des données : " + err);
     });
 }
