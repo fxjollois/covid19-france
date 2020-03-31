@@ -71,7 +71,7 @@ function dessinEvolution(donnees, france = true) {
         .attr("refY", 13)
         .attr("markerWidth", 11)
         .attr("markerHeight", 15)
-        .attr("orient", "right")
+        .attr("orient", 0)
         .append("path")
         .attr("d", "M2,2 L2,13 L8,7 L2,2");
     
