@@ -1,25 +1,6 @@
 /*global d3,Promise */
 
-function transform (files) {
-    var confirmes = files[0],
-        test_date = new RegExp("[0-9]+/[0-9]+/[0-9]+"),
-        dates = Object.keys(confirmes[0]).filter(function (e) { return test_date.test(e); });
-    console.log("--- transform ---")
-    console.log(dates);
-    console.log(confirmes[0]);
-    test = confirmes[0];
-    donnees = dates.map(function (e) {
-                var res = {
-                    d: e,
-                    date: Date.parse(e),
-                    confirmes: test[e]
-                };
-                return res;
-            });
-    console.log(donnees);
-}
-
-function modif_regions (files, pays) {
+function modif_regions(files, pays) {
     var infos_pays = files[0].filter(function (e) { return e["Country/Region"] === pays; }),
         regions = [... new Set(infos_pays.map(function (e) { return e["Province/State"] }))];
     d3.select("#region").selectAll("option")
@@ -70,23 +51,24 @@ function main() {
         });
         
         d3.select("#go").on("click", function () {
-            console.log("GO !!");
             var pays = d3.select("#pays").property("value"),
                 region = d3.select("#region").property("value"),
-                data = files.map(function (e) { return e.filter(function (d) { return (d["Country/Region"] === pays & d["Province/State"] === region); }); }),
-            confirmes = data[0][0],
-            test_date = new RegExp("[0-9]+/[0-9]+/[0-9]+"),
-            dates = Object.keys(confirmes).filter(function (e) { return test_date.test(e); }),
-            donnees = dates.map(function (e) {
-                var res = {
-                    d: e,
-                    date: Date.parse(e),
-                    confirmes: data[0][0][e],
-                    morts: data[1][0][e],
-                    retablis: data[2][0][e]
-                };
-                return res;
-            });
+                data = files.map(function (e) { 
+                    return e.filter(function (d) { return (d["Country/Region"] === pays & d["Province/State"] === region); });
+                }),
+                confirmes = data[0][0],
+                test_date = new RegExp("[0-9]+/[0-9]+/[0-9]+"),
+                dates = Object.keys(confirmes).filter(function (e) { return test_date.test(e); }),
+                donnees = dates.map(function (e) {
+                    var res = {
+                        d: e,
+                        date: Date.parse(e),
+                        confirmes: data[0][0][e],
+                        morts: data[1][0][e]//,
+                        //retablis: data[2][0][e]
+                    };
+                    return res;
+                });
             nettoyageDessin();
             dessinEvolution(donnees, false);
         });
