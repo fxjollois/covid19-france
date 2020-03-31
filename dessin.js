@@ -3,9 +3,13 @@ function nettoyageDessin () {
 }
 
 function dessinEvolution(donnees, france = true) {
-    var margin = {top: 30, right: 40, bottom: 30, left: 60},
-        width = 1000 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom,
+    var xC, xD,
+        margin = {top: 30, right: 40, bottom: 30, left: 60},
+        ratio = 10 / 5,
+        widthTotal = parseInt(d3.select("#graph").style("width").replace("px", "")),
+        heightTotal = widthTotal / ratio,
+        width = widthTotal - margin.left - margin.right,
+        height = heightTotal - margin.top - margin.bottom,
         pad = 20,
         
         couleur_malades = "darkslateblue",
@@ -36,12 +40,49 @@ function dessinEvolution(donnees, france = true) {
             {date: "3/17/20", libelle: "début du confinement" }
         ];
     
-    svg.append("g")
+    svg.selectAll(".horizC")
+        .data(y.ticks())
+        .enter()
+        .append("line")
+        .attr("x1", 0)
+        .attr("x2", width)
+        .attr("y1", function(e) { return y(e); })
+        .attr("y2", function(e) { return y(e); })
+        .style("stroke-width", 1)
+        .style("stroke-dasharray", "5 5")
+        .style("stroke", "lightgray")
+        .style("fill", "none");
+    svg.selectAll(".horizD")
+        .data(y2.ticks())
+        .enter()
+        .append("line")
+        .attr("x1", 0)
+        .attr("x2", width)
+        .attr("y1", function(e) { return y2(e); })
+        .attr("y2", function(e) { return y2(e); })
+        .style("stroke-width", 1)
+        .style("stroke-dasharray", "5 5")
+        .style("stroke", "lightgray")
+        .style("fill", "none");
+    
+    svg.append("defs").append("marker")
+        .attr("id", "arrowhead")
+        .attr("refX", 1)
+        .attr("refY", 13)
+        .attr("markerWidth", 11)
+        .attr("markerHeight", 15)
+        .attr("orient", "right")
+        .append("path")
+        .attr("d", "M2,2 L2,13 L8,7 L2,2");
+    
+    xD = svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
-    svg.append("g")
+    xD.select("path").attr("marker-end", "url(#arrowhead)");
+    xC = svg.append("g")
         .attr("transform", "translate(0," + (height / 2 - pad) + ")")
         .call(d3.axisBottom(x));
+    xC.select("path").attr("marker-end", "url(#arrowhead)");
     
     svg.append("g")
         .call(d3.axisLeft(y));
