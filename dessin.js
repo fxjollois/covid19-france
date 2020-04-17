@@ -4,7 +4,7 @@ function nettoyageDessin () {
 
 function dessinEvolution(donnees, france = true) {
     var xC, xD,
-        margin = {top: 30, right: 40, bottom: 30, left: 60},
+        margin = {top: 30, right: 60, bottom: 30, left: 60},
         ratio = 10 / 5,
         widthTotal = parseInt(d3.select("#graph").style("width").replace("px", "")),
         heightTotal = widthTotal / ratio,
