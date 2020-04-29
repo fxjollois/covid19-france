@@ -26,12 +26,13 @@ function dessinEvolution(donnees, france = true) {
             .domain(d3.extent(donnees, function (d) { return d.date; }))
             .range([ 0, width ]),
         
+        coef_y = 1.1,
         y = d3.scaleLinear()
-            .domain([0, d3.max(donnees, function (d) { return +d.confirmes; })])
+            .domain([0, coef_y * d3.max(donnees, function (d) { return +d.confirmes; })])
             .range([ (height / 2) - pad, 0 ]),
 
         y2 = d3.scaleLinear()
-            .domain([0, d3.max(donnees, function (d) { return +d.morts * 1.2; })])
+            .domain([0, coef_y * d3.max(donnees, function (d) { return +d.morts; })])
             .range([ height, (height / 2) + pad ]),
         
         etapes = [
