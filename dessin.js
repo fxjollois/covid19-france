@@ -38,7 +38,8 @@ function dessinEvolution(donnees, france = true) {
         etapes = [
             {date: "3/12/20", libelle: "allocution du président" },
             {date: "3/16/20", libelle: "école à la maison" },
-            {date: "3/17/20", libelle: "début du confinement" }
+            {date: "3/17/20", libelle: "début du confinement" },
+            {date: "5/11/20", libelle: "déconfinement"}
         ];
     
     svg.selectAll(".horizC")
